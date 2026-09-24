@@ -61,7 +61,9 @@ fun PantallaAgregarEstudiante(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Black
                 )
+
             )
+
         }
     ) {
         paddingValues ->
@@ -69,6 +71,7 @@ fun PantallaAgregarEstudiante(
         Column(
             modifier = Modifier.padding(paddingValues)
         ){
+
 
             }
 
