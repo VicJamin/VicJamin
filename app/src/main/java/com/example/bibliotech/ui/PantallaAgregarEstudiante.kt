@@ -51,18 +51,25 @@ fun PantallaAgregarEstudiante(
 
 
     Scaffold(
+
         containerColor = Color.Black,
         topBar = {
 
             TopAppBar(
+
                 title = {
+
                     Text("Agregar Estudiante", color = Color.White)
+
                 },
+
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Black
                 )
 
+
             )
+
 
         }
     ) {
