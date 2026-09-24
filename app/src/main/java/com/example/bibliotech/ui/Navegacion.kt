@@ -18,6 +18,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.bibliotech.viewmodel.LibroViewModel
 import androidx.compose.runtime.*
+import com.example.bibliotech.viewmodel.EstudianteViewModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navegacion(
@@ -197,5 +199,46 @@ fun Navegacion(
                 }
             )
         }
+
+        composable("estudiantes") {
+            PantallaEstudiantes(
+                onRegresar = {
+                    navController.popBackStack()
+                },
+                onVerDetalles = {},
+                onAgregarEstudiante = {
+                    navController.navigate("agregarEstudiante")
+                },
+                mensaje = mensaje,
+                onMensajeMostrado = { mensaje = null })
+
+        }
+
+        composable("agregarEstudiante") {
+
+            val app = LocalContext.current.applicationContext as BibliotecaApplication
+            val viewModel: EstudianteViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    override  fun <T : ViewModel> create(
+                        modelClass: Class<T>
+                    ): T {
+                        return EstudianteViewModel(app as Application) as T
+                    }
+                }
+            )
+           PantallaAgregarEstudiante(
+               viewModel = viewModel(),
+               onGuardar = {
+                   //mensaje a mostrar cuando se guarde el libro
+                   mensaje = "✔ Estudiante guardado con éxito"
+                   navController.popBackStack()
+               },
+               onCancelar = {
+                   navController.popBackStack()
+               }
+           )
+        }
+
+
     }
 }
