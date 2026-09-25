@@ -143,7 +143,9 @@ fun PantallaAgregarEstudiante(
                 value = apellidos,
                 onValueChange = { apellidos = it },
                 label = { Text("Apellidos del estudiante") },
+
                 modifier = Modifier.fillMaxSize(),
+
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedTextColor = Color.White,
                     unfocusedTextColor = Color.White,
@@ -167,6 +169,7 @@ fun PantallaAgregarEstudiante(
                 OutlinedTextField(
                     value = grado,
                     onValueChange = {},
+                    readOnly = true,
                     label = { Text("Grado") },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -174,7 +177,7 @@ fun PantallaAgregarEstudiante(
                         )
 
                     },
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().menuAnchor(),
 
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
@@ -209,13 +212,14 @@ fun PantallaAgregarEstudiante(
 
             //Seccion del estudiante
             ExposedDropdownMenuBox(
-                expanded = expandirGrado,
-                onExpandedChange = { expandirGrado = !expandirGrado }
+                expanded = expandirSeccion,
+                onExpandedChange = { expandirSeccion = !expandirSeccion }
             )
             {
                 OutlinedTextField(
                     value = seccion,
                     onValueChange = {},
+                    readOnly = true,
                     label = { Text("Seccion") },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
@@ -223,7 +227,7 @@ fun PantallaAgregarEstudiante(
                         )
 
                     },
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().menuAnchor(),
 
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = Color.White,
