@@ -45,14 +45,19 @@ import com.example.bibliotech.model.Estudiante
 // Importamos la entidad Libro
 import com.example.bibliotech.model.Libro
 import com.example.bibliotech.model.Prestamo
-
+import com.example.bibliotech.model.*
 
 
 @Database(
 
 
     // Lista de tablas que tendrá la base de datos
-    entities = [Libro::class, Estudiante::class, Prestamo::class],
+    entities = [
+        Libro::class,
+        Estudiante::class,
+        //añadimos otra entidad en la version 3
+        Prestamo::class
+    ],
 
 
 
