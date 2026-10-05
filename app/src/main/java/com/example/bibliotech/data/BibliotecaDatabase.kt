@@ -71,6 +71,7 @@ import com.example.bibliotech.model.*
     // No exportaremos el esquema durante el curso
     exportSchema = false
 )
+
 abstract class BibliotecaDatabase : RoomDatabase() {
 
 

@@ -25,6 +25,9 @@ import com.example.bibliotech.viewmodel.EstudianteViewModel
 fun Navegacion(
     navController: NavHostController
 ) {
+
+
+
     var mensaje by remember { mutableStateOf<String?>(null) }
 
     NavHost(
@@ -187,6 +190,10 @@ fun Navegacion(
 
             PantallaPrestamo(
                 onRegresar = {
+                    navController.popBackStack()
+                },
+                onPrestamoGuardado = {
+                    mensaje = "✔ Préstamo guardado con éxito"
                     navController.popBackStack()
                 }
             )
