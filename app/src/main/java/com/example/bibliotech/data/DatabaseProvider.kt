@@ -188,6 +188,8 @@ object DatabaseProvider {
 }*/
 package com.example.bibliotech.data
 
+/*
+
 import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
@@ -292,3 +294,58 @@ object DatabaseProvider {
         }
     }
 }
+
+
+*/
+
+import android.content.Context
+import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+
+object DatabaseProvider {
+
+    private const val DATABASE_NAME = "bibliotech_database"
+
+    private val MIGRATION_3_4 = object : Migration(3, 4) {
+
+        override fun migrate(
+            database: SupportSQLiteDatabase
+        ) {
+
+            database.execSQL(
+                """
+                CREATE TABLE IF NOT EXISTS Usuarios (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    nombre TEXT NOT NULL,
+                    usuario TEXT NOT NULL,
+                    contrasena TEXT NOT NULL
+                )
+                """.trimIndent()
+            )
+        }
+    }
+
+    @Volatile
+    private var INSTANCE: BibliotecaDatabase? = null
+
+    fun getDatabase(context: Context): BibliotecaDatabase {
+
+        return INSTANCE ?: synchronized(this) {
+
+            val instance =
+                Room.databaseBuilder(
+                    context.applicationContext,
+                    BibliotecaDatabase::class.java,
+                    DATABASE_NAME
+                )
+                    .addMigrations(MIGRATION_3_4)
+                    .build()
+
+            INSTANCE = instance
+
+            instance
+        }
+    }
+}
+

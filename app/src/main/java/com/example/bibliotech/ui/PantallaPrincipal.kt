@@ -26,8 +26,10 @@ fun PantallaPrincipal(
     onPrestados: () -> Unit,
     onEstudiantes: () -> Unit,
     mensaje:String?,
-    onMensajeMostrado: () -> Unit
-) {
+    onMensajeMostrado: () -> Unit,
+    onCerrarSesion: () -> Unit,
+
+    ) {
     val snackbarHostState =
         remember {
             SnackbarHostState()
@@ -117,6 +119,14 @@ fun PantallaPrincipal(
                 texto = "Estudiantes",
                 onClick = onEstudiantes
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            BotonMenu(
+                texto = "Cerrar sesión",
+                onClick = onCerrarSesion
+            )
+
 
         }
 
