@@ -45,7 +45,7 @@ interface EstudianteDao {
 
 
     // =========================
-    // DELETE
+    // DELETE7
     // Elimina un estudiante
     // =========================
     @Delete

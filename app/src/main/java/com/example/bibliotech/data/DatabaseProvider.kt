@@ -1,3 +1,5 @@
+/*
+
 package com.example.bibliotech.data
 
 import android.content.Context
@@ -41,6 +43,8 @@ object DatabaseProvider {
 // Esta migración crea la nueva tabla sin eliminar los
 // libros que ya existen.
 // ============================================================
+
+
 val MIGRATION_1_2 = object : Migration(1, 2) {
 
 
@@ -154,3 +158,137 @@ object DatabaseProvider {
 }
 
 
+*/
+
+
+
+/*package com.example.bibliotech.data
+
+import android.content.Context
+import androidx.room.Room
+
+object DatabaseProvider {
+
+    @Volatile
+    private var INSTANCE: BibliotecaDatabase? = null
+
+    fun getDatabase(context: Context): BibliotecaDatabase {
+        return INSTANCE ?: synchronized(this) {
+            val instance = Room.databaseBuilder(
+                context.applicationContext,
+                BibliotecaDatabase::class.java,
+                "bibliotech_database"
+            )
+                .build()
+
+            INSTANCE = instance
+            instance
+        }
+    }
+}*/
+package com.example.bibliotech.data
+
+import android.content.Context
+import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+
+
+// La aplicación originalmente tenía la versión 1 de Room,
+// que contenía la tabla de Libros.
+//
+// Ahora tenemos la versión 2 porque agregamos la tabla
+// de Estudiantes.
+//
+// Esta migración crea la nueva tabla sin eliminar los
+// libros que ya existen.
+// ============================================================
+val MIGRATION_1_2 = object : Migration(1, 2) {
+
+    override fun migrate(
+        db: SupportSQLiteDatabase
+    ) {
+
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `Estudiantes` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `carnet` TEXT NOT NULL,
+                `nombres` TEXT NOT NULL,
+                `apellidos` TEXT NOT NULL,
+                `grado` TEXT NOT NULL,
+                `seccion` TEXT NOT NULL,
+                `activo` INTEGER NOT NULL
+            )
+            """.trimIndent()
+        )
+    }
+}
+
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS `Prestamos` ")
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `Prestamos` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `idLibro` INTEGER NOT NULL,
+                `idEstudiante` INTEGER NOT NULL,
+                `fechaPrestamo` TEXT NOT NULL,
+                `fechaDevolucion` TEXT,
+                `devuelto` INTEGER NOT NULL,
+                
+                FOREIGN KEY(`idLibro`) REFERENCES `Libros`(`id`) 
+                ON UPDATE NO ACTION ON DELETE NO ACTION,
+                
+                FOREIGN KEY(`idEstudiante`) REFERENCES `Estudiantes`(`id`)
+                ON UPDATE NO ACTION ON DELETE NO ACTION
+            )
+            """.trimIndent()
+        )
+    }
+}
+
+
+object DatabaseProvider {
+
+    @Volatile
+    private var INSTANCE: BibliotecaDatabase? = null
+
+
+    fun getDatabase(
+        context: Context
+    ): BibliotecaDatabase {
+
+        return INSTANCE ?: synchronized(this) {
+
+            val instance = Room.databaseBuilder(
+
+                // Contexto de la aplicación
+                context.applicationContext,
+
+                // Clase principal de nuestra base de datos
+                BibliotecaDatabase::class.java,
+
+                // Nombre del archivo SQLite
+                "bibliotech_database"
+
+            )
+
+                // Le indicamos a Room cómo pasar de la versión 1
+                // a la versión 2 y luego a la versión 3.
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+
+                // Si ocurre una inconsistencia en la migración, recrea la base de datos
+                .fallbackToDestructiveMigration()
+
+                // Construimos la base de datos
+                .build()
+
+
+            INSTANCE = instance
+
+            instance
+        }
+    }
+}
